@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const logger = require('morgan');
+const cors= require("cors");
 
 const trackRouter = require("./controllers/tracks.js");
 
@@ -18,6 +19,7 @@ app.use(logger('dev'));
 
 // Routes go here
 app.use("/tracks", trackRouter);
+app.use(cors({ origin: 'http://localhost:5173' }));
 
 app.listen(3000, () => {
   console.log('The express app is ready!');
