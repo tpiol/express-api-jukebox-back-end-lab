@@ -29,40 +29,58 @@ router.get("/", async (req, res) => {
 // GET /tracks/:id      | SHOW
 
 router.get("/:trackId", async (req, res) => {
-try {
-    const foundTrack = await Track.findById(req.params.trackId);
-    if (!foundTrack) {
-        res.status(404);
-        throw new Error("Track not found");
+    try {
+        const foundTrack = await Track.findById(req.params.trackId);
+        if (!foundTrack) {
+            res.status(404);
+            throw new Error("Track not found");
+        }
+        res.status(200).json(foundTrack);
+    } catch (err) {
+        if (res.statusCode === 404) {
+            res.json({ err: err.message })
+        } else {
+            res.status(500).json({ err: err.message });
+        }
     }
-    res.status(200).json(foundTrack);
-} catch (err) {
-    if (res.statusCode === 404) {
-        res.json({ err: err.message })
-    } else {
-        res.status(500).json({ err: err.message });
-    }
-}
 });
 
 // PUT /tracks/:id      | UPDATE
 
+router.put("/:trackId", async (req, res) => {
+    try {
+        const updatedTrack = await Track.findByIdAndUpdate(req.params.trackId, req.body,
+        {new: true});
+        if (!updatedTrack) {
+            res.status(404);
+            throw new Error("Track not found");
+        }
+        res.status(200).json(updatedTrack);
+    } catch (err) {
+         if (res.statusCode === 404) {
+            res.json({ err: err.message })
+        } else {
+            res.status(500).json({ err: err.message });
+        }
+    }
+});
+
 // DELETE /tracks/:id   | DELETE
 router.delete("/:trackId", async (req, res) => {
-try {
-    const deletedTrack = await Track.findByIdAndDelete(req.params.trackId);
-    if (!deletedTrack) {
-        res.status(404);
-        throw new Error("Track not found");
+    try {
+        const deletedTrack = await Track.findByIdAndDelete(req.params.trackId);
+        if (!deletedTrack) {
+            res.status(404);
+            throw new Error("Track not found");
+        }
+        res.status(200).json(deletedTrack);
+    } catch (err) {
+        if (res.statusCode === 404) {
+            res.json({ err: err.message })
+        } else {
+            res.status(500).json({ err: err.message });
+        }
     }
-    res.status(200).json(deletedTrack);
-} catch (err) {
-    if (res.statusCode === 404) {
-        res.json({ err: err.message })
-    } else {
-        res.status(500).json({ err: err.message });
-    }
-}
 });
 
 
